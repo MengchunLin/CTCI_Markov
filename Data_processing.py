@@ -191,6 +191,9 @@ def process_file(file, thickness_threshold):
     df_copy.to_excel(processed_file, index=False)
     created_file.append(processed_file)
     print(f'處理完成，已儲存：{processed_file}')
+    #　把created_file存入json
+    with open('created_file.json', 'w') as f:
+        json.dump(created_file, f)
     return processed_file
 
 # 有幾個鑽孔需要處理
