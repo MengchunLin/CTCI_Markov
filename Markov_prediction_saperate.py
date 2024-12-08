@@ -32,30 +32,39 @@ entire_matrix = entire_file[2:, :]  # skip first column 第一行是名稱
 Hole_name = entire_file[0]
 Hole_distance = entire_file[1]
 # 把 entire_matrix 拆成三個部分
-entire_matrix_1 = entire_matrix[:3000, :]
+entire_matrix_1 = entire_matrix[:2000, :]
 print('entire_matrix_1:', entire_matrix_1)
 
-entire_matrix_2 = entire_matrix[3000:4000,:]
+entire_matrix_2 = entire_matrix[2000:3000,:]
 print('entire_matrix_2:', entire_matrix_2)
 
-entire_matrix_3 = entire_matrix[4000:, :]
+entire_matrix_3 = entire_matrix[3000:4000, :]
 print('entire_matrix_3:', entire_matrix_3)
+
+entire_matrix_4 = entire_matrix[4000:, :]
+print('entire_matrix_4:', entire_matrix_4)
 # 取得初始狀態
 initial_array_1 = entire_matrix_1[0]
 initial_array_2 = entire_matrix_2[0]
 initial_array_3 = entire_matrix_3[0]
+initial_array_4 = entire_matrix_4[0]
+
+result_matrix = []
 
 # 建立迴圈分析三個部分
-for i in range(1,4):
+for i in range(1,5):
     if i == 1:
         entire_matrix = entire_matrix_1
         initial_array = initial_array_1
     elif i == 2:
         entire_matrix = entire_matrix_2
         initial_array = initial_array_2
-    else:
+    elif i == 3:
         entire_matrix = entire_matrix_3
         initial_array = initial_array_3
+    else:
+        entire_matrix = entire_matrix_4
+        initial_array = initial_array_4
     # 取得土壤種類
     unique_numbers = np.unique(entire_matrix)
     # 從unique_numbers過濾掉0
@@ -228,10 +237,14 @@ for i in range(1,4):
     predict_result_entire = predict_geological_types(
         Tmatrix_V_entire, Tmatrix_H_entire, HoleLocation_entire, group_number_entire
     )
-    
-    # 將每次預測的結果向下堆疊
-    combined_matrix = np.vstack((combined_matrix, predict_result_entire))
 
+    # 把預測結果儲存到
+    result_matrix.append(predict_result_entire)
+
+# 將預測結果與原始矩陣結合
+combined_matrix = np.vstack(result_matrix)
+
+    
 
 def irregular_shift(combined_matrix, max_shift):
     """
