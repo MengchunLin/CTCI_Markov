@@ -7,8 +7,8 @@ file_path = filedialog.askopenfilename()
 df = pd.read_excel(file_path)
 
 # 確保 'Soil Type' 列存在
-if 'Combined soil type' in df.columns:
-    original = df['Combined soil type']
+if '合併後' in df.columns:
+    original = df['合併後']
     # 線性補值
     original = original.interpolate(method='linear')
 else:
