@@ -402,9 +402,15 @@ plt.xticks(
     labels=scaled_labels,
     fontsize=10
 )
+# 設置 y 軸的 ticks
+ticks = np.arange(0, D, 500)  # 每 500 筆資料設置一個 tick
+
+# 確保 labels 和 ticks 長度一致
+labels = np.arange(0, len(ticks) * 10, 10)  # 每次以 10 增加
+
 plt.yticks(
-    ticks=np.arange(0, D, 10),
-    labels=np.arange(0, D, 10),
+    ticks=ticks,
+    labels=labels,
     fontsize=10
 )
 
