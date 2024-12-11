@@ -72,6 +72,7 @@ for i in range(1,5):
     typenumber = len(unique_numbers)
     # 建立土壤代號對應的數字
     mapping = {value: index+1 for index, value in enumerate(unique_numbers)}
+    resever_mapping = {v: k for k, v in mapping.items()}
     # 將公司土壤代號轉換為 1 ~ ...
     def map_value(value):
         return mapping.get(value, value)  # 如果 value 在 mapping 中有對應的值，則映射；否則保持原值
@@ -102,7 +103,7 @@ for i in range(1,5):
             for type in initial_array:
                 for i in range(W):
                     if i<location:
-                        group_number[0][i] = type
+                        group_number[0][i] = mapping[type]
                     else:
                         continue
         
@@ -159,8 +160,6 @@ for i in range(1,5):
 
     # 計算 HoleLocation_entire 的轉移矩陣
     Tmatrix_V_entire, Tmatrix_H_entire ,group_number_entire= calculate_transition_matrix(entire_matrix,HoleLocation_entire)
-    print('Tmatrix_V_entire:')
-    print(Tmatrix_V_entire)
 
     # 預測地質類型的函數
     def predict_geological_types(Tmatrix_V, Tmatrix_H, HoleLocation,group_number):
@@ -168,7 +167,7 @@ for i in range(1,5):
         M_state = 0
         Q_state = 0
         Nx = 0
-        current_matrix = np.zeros(len(unique_numbers))
+        current_matrix = np.zeros(len(transitionName))
 
         conditions = {}
         for j in range(1, len(HoleLocation)):
@@ -228,21 +227,32 @@ for i in range(1,5):
                         current_matrix[k] = k_sum / f_sum
 
                 # 進行預測
-                predict_type = np.random.choice(unique_numbers, replace=True, p=current_matrix)
+                predict_type = np.random.choice(transitionName, replace=True, p=current_matrix)
                 # if i in HoleLocation:
                 #     print('k_sum:',k_sum,'f_sum:',f_sum,'Nx:',Nx)
-                group_number[layer][i] =predict_type
+                group_number[layer][i] = predict_type
         return group_number
     print('predicting...')
-    print(group_number_entire)
 
     # 預測地質類型
     predict_result_entire = predict_geological_types(
         Tmatrix_V_entire, Tmatrix_H_entire, HoleLocation_entire, group_number_entire
     )
-
+    print('predict_result_entire:',predict_result_entire.shape)
+    mapped_results = []
+    # 使用 for 迴圈進行映射
+    for row in predict_result_entire:
+        mapped_row = []
+        for value in row:
+            if isinstance(value, np.ndarray):  # 如果是 numpy.ndarray，提取標量
+                value = value.item()
+            if value in resever_mapping:  # 確保值存在於 mapping 中
+                mapped_row.append(resever_mapping[value])
+            else:
+                mapped_row.append(None)  # 如果無法映射，填充一個默認值（例如 None）
+        mapped_results.append(mapped_row)
     # 把預測結果儲存到
-    result_matrix.append(predict_result_entire)
+    result_matrix.append(mapped_results)
 
 # 將預測結果與原始矩陣結合
 combined_matrix = np.vstack(result_matrix)
