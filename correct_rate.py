@@ -20,9 +20,11 @@ result = result.values.flatten()
 
 # 計算正確率
 correct_rate = 0
-for i in range(len(original)):
+start = 2000
+end = 3000
+for i in range(start, end):
     if original[i] == result[i]:
         correct_rate += 1
-x = correct_rate / len(original) * 100
-print(f"Correct Rate: {x:.2f}%")
+y = correct_rate / (end - start) * 100
+print(f"Correct Rate: {y:.2f}%")
 

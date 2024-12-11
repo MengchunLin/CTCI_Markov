@@ -102,7 +102,7 @@ for i in range(1,5):
             for type in initial_array:
                 for i in range(W):
                     if i<location:
-                        group_number[0][i] = mapping[type]
+                        group_number[0][i] = type
                     else:
                         continue
         
@@ -159,6 +159,8 @@ for i in range(1,5):
 
     # 計算 HoleLocation_entire 的轉移矩陣
     Tmatrix_V_entire, Tmatrix_H_entire ,group_number_entire= calculate_transition_matrix(entire_matrix,HoleLocation_entire)
+    print('Tmatrix_V_entire:')
+    print(Tmatrix_V_entire)
 
     # 預測地質類型的函數
     def predict_geological_types(Tmatrix_V, Tmatrix_H, HoleLocation,group_number):
@@ -166,7 +168,7 @@ for i in range(1,5):
         M_state = 0
         Q_state = 0
         Nx = 0
-        current_matrix = np.zeros(len(transitionName))
+        current_matrix = np.zeros(len(unique_numbers))
 
         conditions = {}
         for j in range(1, len(HoleLocation)):
@@ -226,12 +228,13 @@ for i in range(1,5):
                         current_matrix[k] = k_sum / f_sum
 
                 # 進行預測
-                predict_type = np.random.choice(transitionName, replace=True, p=current_matrix)
+                predict_type = np.random.choice(unique_numbers, replace=True, p=current_matrix)
                 # if i in HoleLocation:
                 #     print('k_sum:',k_sum,'f_sum:',f_sum,'Nx:',Nx)
                 group_number[layer][i] =predict_type
         return group_number
     print('predicting...')
+    print(group_number_entire)
 
     # 預測地質類型
     predict_result_entire = predict_geological_types(
