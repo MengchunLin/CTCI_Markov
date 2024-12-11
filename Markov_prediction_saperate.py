@@ -137,7 +137,7 @@ for i in range(1,5):
             for j in range(np.size(Tmatrix_V, 1)):
                 Tmatrix_V[i][j] = Tmatrix_V[i][j] / count_V[i]
 
-        K = 1
+        K = 9
         HPCM = np.zeros([len(count_V), len(count_V)])
         Tmatrix_H = np.zeros([len(count_V), len(count_V)])
 
