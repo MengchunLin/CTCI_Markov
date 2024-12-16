@@ -141,7 +141,7 @@ def plot_data(df):
     # 添加標籤和標題
     plt.xlabel('qc (MPa)')
     plt.ylabel('Depth (m)')
-    plt.title('31')
+    plt.title('15')
     
     # 添加網格
     plt.grid(linestyle='-', linewidth=0.5)
@@ -153,7 +153,7 @@ def plot_data(df):
     ax.yaxis.set_major_locator(y_major_locator)
 
     # 保存圖片
-    plt.savefig('qc-31')
+    plt.savefig('qc-15')
 
     # 顯示圖片
     plt.show()

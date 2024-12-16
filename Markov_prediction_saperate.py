@@ -22,6 +22,8 @@ CTCI='CTCI.csv'
 # -----------testing file----------------
 # 記錄開始時間
 start_time = time.time()
+# -----------call simplify_data.py----------------
+
 
 # -----------call simplify_data.py----------------
 # file preprocessing

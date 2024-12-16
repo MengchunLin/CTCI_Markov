@@ -9,7 +9,7 @@ from tkinter import filedialog, simpledialog, messagebox
 with open('created_file.json', 'r') as file:
     file_path_list = json.load(file)
 
-with open('predict_borehole.txt', 'r') as file:
+with open('12-15-3.txt', 'r') as file:
     predict_borehole = file.read().splitlines()
 
 
@@ -45,9 +45,7 @@ def predict_data(file_path_list, predict_borehole):
                 continue
             # 如果i列的SoilType是predict_location_soiltype[i]
             # 印出df.loc[i, '合併後']的數據種類
-            print(type(df.loc[i, '合併後']))
             # 印出predict_location_soiltype[i]
-            print(type(predict_location_soiltype[i]))
             if df.loc[i, '合併後'] == int(predict_location_soiltype[i]):
                 # 將i列的數據填入qc, fs, u2
                 qc.append(df.loc[i, 'Cone resistance[2]'])
@@ -67,8 +65,40 @@ def predict_data(file_path_list, predict_borehole):
             predict_df.loc[i, 'Pore pressure u2[6]'] = 0
     return predict_df
                 
+# 資料填空
+def fill_data(predict_df):
+    # 紀錄包含 0 的行位置
+    zero_rows = predict_df[(predict_df == 0).any(axis=1)].index
+
+    # 將所有 0 替換為 NaN，方便插值
+    predict_df = predict_df.replace(0, np.nan)
+
+    # 逐列進行線性插值
+    for column in predict_df.columns:
+        # 確保列為數值型別，避免類型錯誤
+        predict_df[column] = pd.to_numeric(predict_df[column], errors='coerce')
+        # 線性插值
+        predict_df[column] = predict_df[column].interpolate()
+
+    # 對原本包含 0 的行進行 ±1% 隨機調整（僅限垂直軸，例如 "Cone resistance[2]"）
+    for row_idx in zero_rows:
+        if "Cone resistance[2]" in predict_df.columns:
+            predict_df.loc[row_idx, "Cone resistance[2]"] = (
+                predict_df.loc[row_idx, "Cone resistance[2]"]
+                * np.random.uniform(0.8, 1.4)
+            )
+    
+    return predict_df
+
+
+
+
+
+
 
 predict_df = predict_data(file_path_list, predict_borehole)
+print('predict_df:', predict_df)
+predict_df = fill_data(predict_df)
 print('predict_df:', predict_df)
 # 將預測的df存入excel
 predict_df.to_excel('predict_data.xlsx', index=False)
