@@ -358,9 +358,11 @@ def main():
                 if additional_rows > 0:
                     for _ in range(additional_rows):
                         markov_matrix.loc[len(markov_matrix)] = [None] * len(markov_matrix.columns)
+                        print(f"擴展行數: {additional_rows}")
 
                 # 插入新資料到對應列
                 markov_matrix.iloc[1:1+len(new_data), i] = new_data.values
+                print(f"已插入新資料到列 {i}。")
             else:
                 print(f"警告: 檔案 {processed_file} 缺少 '合併後' 欄位，插入空值。")
                 # 插入空值列
@@ -374,24 +376,6 @@ def main():
     markov_matrix = markov_matrix.dropna(axis=1, how='all')
     # 將 NaN 填充為 0，若有需要
     markov_matrix = markov_matrix.fillna(0)
-
-    # 進一步簡化土層
-    further_simplify = if_further_simplify_soil_layer()
-    if further_simplify == 'Y':
-        markov_matrix = further_simplify_soil_layer(markov_matrix)
-        print("已進一步簡化土層。")
-
-        D = len(markov_matrix.columns)
-        W = len(markov_matrix) - 2
-
-        # 建立視窗告訴使用者D,W
-        messagebox.showinfo("提示", f"寬度: {W} 單位\n深度: {D} 單位")
-
-        # 再次檢查是否需要進一步簡化土層
-        further_simplify = if_further_simplify_soil_layer()
-        if further_simplify == 'Y':
-            markov_matrix = further_simplify_soil_layer(markov_matrix)
-            print("已進一步簡化土層。")
     
     print(markov_matrix)
 

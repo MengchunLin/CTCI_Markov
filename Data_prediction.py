@@ -9,7 +9,7 @@ from tkinter import filedialog, simpledialog, messagebox
 with open('created_file.json', 'r') as file:
     file_path_list = json.load(file)
 
-with open('12-15-3.txt', 'r') as file:
+with open('20-22-3.txt', 'r') as file:
     predict_borehole = file.read().splitlines()
 
 
@@ -85,6 +85,16 @@ def fill_data(predict_df):
         if "Cone resistance[2]" in predict_df.columns:
             predict_df.loc[row_idx, "Cone resistance[2]"] = (
                 predict_df.loc[row_idx, "Cone resistance[2]"]
+                * np.random.uniform(0.8, 1.4)
+            )
+        if "Local friction[3]" in predict_df.columns:
+            predict_df.loc[row_idx, "Local friction[3]"] = (
+                predict_df.loc[row_idx, "Local friction[3]"]
+                * np.random.uniform(0.8, 1.4)
+            )
+        if "Pore pressure u2[6]" in predict_df.columns:
+            predict_df.loc[row_idx, "Pore pressure u2[6]"] = (
+                predict_df.loc[row_idx, "Pore pressure u2[6]"]
                 * np.random.uniform(0.8, 1.4)
             )
     
