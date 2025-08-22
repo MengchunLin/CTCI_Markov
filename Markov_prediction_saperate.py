@@ -3,6 +3,7 @@ import pandas as pd
 import operator as op
 import matplotlib.pyplot as plt
 from collections import Counter
+import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import subprocess
 import json
@@ -10,7 +11,6 @@ import tkinter as tk
 import time
 import tkinter.messagebox as messagebox
 import matplotlib.colors as mcolors
-from matplotlib.ticker import MaxNLocator
 # -----------testing file----------------
 Matrix4D = "test.csv"
 Matrix5D = '5DMatrix.csv'
@@ -23,7 +23,8 @@ CTCI='CTCI.csv'
 # 記錄開始時間
 start_time = time.time()
 # -----------call simplify_data.py----------------
-subprocess.run(["python", "Data_processing.py"])
+
+
 # -----------call simplify_data.py----------------
 # file preprocessing
 entire_file = pd.read_csv('markov_matrix.csv', delimiter=",",header=None).fillna(0).values # 讀取文件空值全部補0
@@ -396,22 +397,26 @@ plt.legend(
 # 繪製鑽孔位置的垂直線與標註
 for i, name in zip(HoleLocation_entire, Hole_name):
     if i == 0:
-        plt.axvline(i, color='sienna', linestyle='-', linewidth=2)
+        i = 0.5
+        plt.axvline(x=i, color='sienna', linestyle='-', linewidth=2)
         # 標註名稱
         plt.text(i, 0, name, color='black', fontsize=8, ha='center', va='bottom')
     else:
-
-        plt.axvline(i, color='sienna', linestyle='-', linewidth=2)
+        print('i:',i)
+        plt.axvline(x=i, color='sienna', linestyle='-', linewidth=2)
         # 標註名稱
         plt.text(i, 0, name, color='black', fontsize=8, ha='center', va='bottom')
-plt.axline((user_input, 0), (user_input, D), color='red', linestyle='--', linewidth=1)
-plt.text(user_input, D-2 , user_input, color='red', fontsize=8, ha='center', va='top')
-plt.text(user_input, 0-2, 'Predict', color='red', fontsize=8, ha='center', va='bottom')
+plt.axline((user_input, 0), (user_input, D), color='red', linestyle='--', linewidth=1)   
 
 # 設置刻度
-original_ticks = np.arange(0, int(Hole_distance.max() ))
+original_ticks = np.arange(0, int(Hole_distance.max() ), 100)
 scaled_labels = (original_ticks ).astype(int)
 
+plt.xticks(
+    ticks=original_ticks,
+    labels=scaled_labels,
+    fontsize=10
+)
 # 設置 y 軸的 ticks
 ticks = np.arange(0, D, 500)  # 每 500 筆資料設置一個 tick
 
