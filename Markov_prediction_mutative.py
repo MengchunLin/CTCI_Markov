@@ -17,8 +17,9 @@ Matrix5D = '5DMatrix.csv'
 sixHole = '6Hole.csv'
 test='test - 複製.csv'
 eightSoil='8soil.csv'
-CECI='markov_matrix.csv'
+CECI='markov_matrix_20-22.csv'
 CTCI='CTCI.csv'
+predict_file = 'markov_matrix_20-22.csv'
 # -----------testing file----------------
 # 記錄開始時間
 start_time = time.time()
@@ -27,23 +28,23 @@ start_time = time.time()
 
 # -----------call simplify_data.py----------------
 # file preprocessing
-entire_file = pd.read_csv('markov_matrix.csv', delimiter=",",header=None).fillna(0).values # 讀取文件空值全部補0
+entire_file = pd.read_csv(predict_file, delimiter=",",header=None).fillna(0).values # 讀取文件空值全部補0
 # entire_file沒有標題，所以第一行是數據
 entire_matrix = entire_file[2:, :]  # skip first column 第一行是名稱
 # 取得標題作為孔洞名稱
 Hole_name = entire_file[0]
 Hole_distance = entire_file[1]
 # 把 entire_matrix 拆成三個部分
-entire_matrix_1 = entire_matrix[:2250, :]
+entire_matrix_1 = entire_matrix[:2150, :]
 # print('entire_matrix_1:', entire_matrix_1)
 
-entire_matrix_2 = entire_matrix[1750:3250,:]
+entire_matrix_2 = entire_matrix[1850:3150,:]
 # # print('entire_matrix_2:', entire_matrix_2)
 
-entire_matrix_3 = entire_matrix[2750:4250, :]
+entire_matrix_3 = entire_matrix[2850:4150, :]
 # print('entire_matrix_3:', entire_matrix_3)
 
-entire_matrix_4 = entire_matrix[3750:, :]
+entire_matrix_4 = entire_matrix[3850:, :]
 # print('entire_matrix_4:', entire_matrix_4)
 # 取得初始狀態
 initial_array_1 = entire_matrix_1[0]
