@@ -19,7 +19,7 @@ test='test - 複製.csv'
 eightSoil='8soil.csv'
 CECI='markov_matrix_20-22.csv'
 CTCI='CTCI.csv'
-predict_file = 'markov_matrix_20-22.csv'
+predict_file = r'C:\\Users\\Love_U\\Desktop\\CTCI_Markov\\CTCI_Markov\\markov_matrix_12-15.csv'
 # -----------testing file----------------
 # 記錄開始時間
 start_time = time.time()
@@ -35,16 +35,16 @@ entire_matrix = entire_file[2:, :]  # skip first column 第一行是名稱
 Hole_name = entire_file[0]
 Hole_distance = entire_file[1]
 # 把 entire_matrix 拆成三個部分
-entire_matrix_1 = entire_matrix[:2150, :]
+entire_matrix_1 = entire_matrix[:2500, :]
 # print('entire_matrix_1:', entire_matrix_1)
 
-entire_matrix_2 = entire_matrix[1850:3150,:]
+entire_matrix_2 = entire_matrix[2500:3500,:]
 # # print('entire_matrix_2:', entire_matrix_2)
 
-entire_matrix_3 = entire_matrix[2850:4150, :]
+entire_matrix_3 = entire_matrix[3500:4500, :]
 # print('entire_matrix_3:', entire_matrix_3)
 
-entire_matrix_4 = entire_matrix[3850:, :]
+entire_matrix_4 = entire_matrix[4500:, :]
 # print('entire_matrix_4:', entire_matrix_4)
 # 取得初始狀態
 initial_array_1 = entire_matrix_1[0]

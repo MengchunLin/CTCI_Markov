@@ -4,7 +4,7 @@ from tkinter import filedialog
 # 讀取一個excel檔案
 # 建立視窗選取檔案
 # file_path = filedialog.askopenfilename()
-file_path = 'C:\\Users\\smail\\OneDrive\\Desktop\\CTCI_Markov\\萬鼎全部鑽孔\\F4-T14_modified_processed.xlsx'
+file_path = 'C:\\Users\\Love_U\Desktop\\CTCI_Markov\\CTCI_Markov\\萬鼎全部鑽孔\\F4-T32_modified_processed.xlsx'
 
 df = pd.read_excel(file_path)
 
@@ -17,7 +17,7 @@ else:
     raise ValueError("Excel 檔案中沒有 'Soil Type' 列")
 
 # 讀取一個csv檔案
-result = pd.read_csv('C:\\Users\\smail\\OneDrive\\Desktop\\CTCI_Markov\\預測成果\\Saperate_12-15_1.txt')
+result = pd.read_csv('C:\\Users\\Love_U\\Desktop\\CTCI_predict_result\\Mutative_31-33_1m_2.txt')
 result = result.values.flatten()
 
 # 計算正確率
@@ -34,8 +34,9 @@ for i in range(start, end):
         correct_rate += 1
 
 y = correct_rate / (end - start) * 100
-print(f"整體 Rate: {y:.2f}")
-''
+y = round(y, 2)
+print(y)
+
 correct_rate = 0
 start = 1000
 if len(original) < len(result):
@@ -47,7 +48,9 @@ for i in range(start, end):
     if original[i] == result[i]:
         correct_rate += 1
 y = correct_rate / (end - start) * 100
-print(f"0-20 Rate: {y:.2f}")
+y = round(y, 2)
+print(y)
+
 
 correct_rate = 0
 start = 1000
@@ -56,7 +59,9 @@ for i in range(start, end):
     if original[i] == result[i]:
         correct_rate += 1
 y = correct_rate / (end - start) * 100
-print(f"20-40 Rate: {y:.2f}")
+y = round(y, 2)
+print(y)
+
 
 correct_rate = 0
 start = 2000
@@ -65,7 +70,9 @@ for i in range(start, end):
     if original[i] == result[i]:
         correct_rate += 1
 y = correct_rate / (end - start) * 100
-print(f"40-60 Rate: {y:.2f}")
+y = round(y, 2)
+print(y)
+
 
 correct_rate = 0
 start = 3000
@@ -74,7 +81,8 @@ for i in range(start, end):
     if original[i] == result[i]:
         correct_rate += 1
 y = correct_rate / (end - start) * 100
-print(f"60-80 Rate: {y:.2f}")
+y = round(y, 2)
+print(y)
 
 correct_rate = 0
 start = 4000
@@ -87,4 +95,6 @@ for i in range(start, end):
     if original[i] == result[i]:
         correct_rate += 1
 y = correct_rate / (end - start) * 100
-print(f"80-105 Rate: {y:.2f}")
+y = round(y, 2)
+print(y)
+
