@@ -86,12 +86,10 @@ for i in range(1, num_of_loops + 1):
     transitionName = np.arange(1,typenumber+1)
     # file preprocessing
 
-    # 參考前後土層厚度
-    refer_depth = 5/0.02  # 假設每層厚度為100
 
     # 定義模型的間隔、寬度、深度、面積、孔洞數量和地質類型數量等參數
     W = int(int(Hole_distance.max())) + 1
-    D = int(entire_matrix.shape[0]- refer_depth) 
+    D = int(entire_matrix.shape[0]) 
     # print('D:',D)
     # print('W:',W)
 
