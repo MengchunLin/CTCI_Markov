@@ -34,40 +34,43 @@ entire_matrix = entire_file[2:, :]  # skip first column 第一行是名稱
 # 取得標題作為孔洞名稱
 Hole_name = entire_file[0]
 Hole_distance = entire_file[1]
-# 把 entire_matrix 拆成三個部分
-entire_matrix_1 = entire_matrix[:2500, :]
-# print('entire_matrix_1:', entire_matrix_1)
+# 矩陣上下統計範圍
+m = int(5*50)
+# 把 entire_matrix 拆成多個部分(每500個更新一次matrix)
+# 迴圈數量
+num_of_loops = entire_matrix.shape[0] // 500
+entire_matrices = {}
+#根據迴圈數量建立多個矩陣
+for i in range(num_of_loops):
+    # 如果矩陣為第一個
+    if i < m:
+        # 第i個矩陣
+        key = f'entire_matrix_{i+1}'
+        matrix = entire_matrix[i*50 - i*50 :i*50 + m, :]
+        entire_matrices[key] = matrix
+    elif i < num_of_loops - 1:
+        key = f'entire_matrix_{i+1}'
+        matrix = entire_matrix[i*50 - m :i*50 + m, :]
+        entire_matrices[key] = matrix
+    else:
+        key = f'entire_matrix_{i+1}'
+        matrix = entire_matrix[i*50 - m :, :]
+        entire_matrices[key] = matrix
 
-entire_matrix_2 = entire_matrix[2500:3500,:]
-# # print('entire_matrix_2:', entire_matrix_2)
-
-entire_matrix_3 = entire_matrix[3500:4500, :]
-# print('entire_matrix_3:', entire_matrix_3)
-
-entire_matrix_4 = entire_matrix[4500:, :]
-# print('entire_matrix_4:', entire_matrix_4)
-# 取得初始狀態
-initial_array_1 = entire_matrix_1[0]
-initial_array_2 = entire_matrix_2[0]
-initial_array_3 = entire_matrix_3[0]
-initial_array_4 = entire_matrix_4[0]
 
 result_matrix = []
 
 # 建立迴圈分析三個部分
-for i in range(1,5):
-    if i == 1:
-        entire_matrix = entire_matrix_1
-        initial_array = initial_array_1
-    elif i == 2:
-        entire_matrix = entire_matrix_2
-        initial_array = initial_array_2
-    elif i == 3:
-        entire_matrix = entire_matrix_3
-        initial_array = initial_array_3
-    else:
-        entire_matrix = entire_matrix_4
-        initial_array = initial_array_4
+for i in range(1, num_of_loops + 1):
+
+    # 讀取第i個矩陣
+    entire_matrix = entire_matrices[f'entire_matrix_{i}']
+    print(f'Processing entire_matrix_{i} with shape {entire_matrix}')
+
+    # 取得初始狀態
+    initial_array = entire_matrix[0]
+    print('initial_array:',initial_array)
+
     # 取得土壤種類
     unique_numbers = np.unique(entire_matrix)
     # 從unique_numbers過濾掉0

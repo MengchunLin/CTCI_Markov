@@ -24,10 +24,10 @@ CTCI='CTCI.csv'
 start_time = time.time()
 # -----------call simplify_data.py----------------
 
-
+predict_file = 'C:\\Users\\Love_U\\Desktop\\CTCI_Markov\\CTCI_Markov\\markov_matrix_12-15.csv'
 # -----------call simplify_data.py----------------
 # file preprocessing
-entire_file = pd.read_csv('markov_matrix.csv', delimiter=",",header=None).fillna(0).values # 讀取文件空值全部補0
+entire_file = pd.read_csv(predict_file, delimiter=",",header=None).fillna(0).values # 讀取文件空值全部補0
 # entire_file沒有標題，所以第一行是數據
 entire_matrix = entire_file[2:, :]  # skip first column 第一行是名稱
 # 取得標題作為孔洞名稱
@@ -50,6 +50,7 @@ initial_array_1 = entire_matrix_1[0]
 initial_array_2 = entire_matrix_2[0]
 initial_array_3 = entire_matrix_3[0]
 initial_array_4 = entire_matrix_4[0]
+print('initial_array_1:',initial_array_1)
 
 result_matrix = []
 
