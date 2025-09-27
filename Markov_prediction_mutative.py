@@ -38,7 +38,7 @@ Hole_distance = entire_file[1]
 m = int(5*50)
 # 把 entire_matrix 拆成多個部分(每500個更新一次matrix)
 # 迴圈數量
-num_of_loops = entire_matrix.shape[0] // 500
+num_of_loops = entire_matrix.shape[0] // 50
 entire_matrices = {}
 #根據迴圈數量建立多個矩陣
 for i in range(num_of_loops):
@@ -46,7 +46,7 @@ for i in range(num_of_loops):
     if i < m:
         # 第i個矩陣
         key = f'entire_matrix_{i+1}'
-        matrix = entire_matrix[i*50 - i*50 :i*50 + m, :]
+        matrix = entire_matrix[:i*50 + m, :]
         entire_matrices[key] = matrix
     elif i < num_of_loops - 1:
         key = f'entire_matrix_{i+1}'
@@ -57,7 +57,7 @@ for i in range(num_of_loops):
         matrix = entire_matrix[i*50 - m :, :]
         entire_matrices[key] = matrix
 
-
+print(f'Created {len(entire_matrices)} matrices for processing.')
 result_matrix = []
 
 # 建立迴圈分析三個部分
