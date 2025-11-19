@@ -16,7 +16,7 @@ Matrix5D = '5DMatrix.csv'
 sixHole = '6Hole.csv'
 test='test - 複製.csv'
 eightSoil='8soil.csv'
-CECI='markov_matrix.csv'
+CECI='C:\\Users\\Love_U\\Desktop\\CTCI_Markov\\CTCI_Markov\\markov_matrix_20-22.csv'
 CTCI='CTCI.csv'
 # -----------testing file----------------
 # 記錄開始時間
@@ -24,7 +24,7 @@ start_time = time.time()
 # -----------call simplify_data.py----------------
 #　subprocess.run(["python", "Data_processing.py"])
 # 打開檔案'合併結果.csv'
-entire_file = pd.read_csv('markov_matrix.csv')
+entire_file = pd.read_csv('C:\\Users\\Love_U\\Desktop\\CTCI_Markov\\CTCI_Markov\\markov_matrix_20-22.csv')
 # -----------call simplify_data.py----------------
 
 # file preprocessing
@@ -338,7 +338,7 @@ mapping_key = list(mapping.keys())
 mapping_value = list(mapping.values())
 # print('mapping_key:',mapping_key)
 # print('mapping_value:',mapping_value)
-original_ticks = np.arange(0, int(Hole_distance.max() / interval), 100)
+original_ticks = np.arange(0, int(Hole_distance.max() / interval), 200)
 # 缩放后的 x 轴刻度标签
 scaled_labels = (original_ticks * interval).astype(int)
 # 定義自定義顏色映射
@@ -410,8 +410,8 @@ plt.xticks(
     fontsize=10
 )
 plt.yticks(
-    ticks=np.arange(0, D, 10),
-    labels=np.arange(0, D, 10),
+    ticks=np.arange(0, D, 500),
+    labels=np.arange(0, D, 500),
     fontsize=10
 )
 

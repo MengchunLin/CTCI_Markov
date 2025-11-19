@@ -137,23 +137,30 @@ def plot_data(df):
     blue_patch = mpatches.Patch(color='darkkhaki', label='Clayey Silt(4)')
     black_patch = mpatches.Patch(color='burlywood', label='Caly(5)')
     plt.legend(handles=[red_patch, orange_patch, green_patch, blue_patch, black_patch])
+
+    fig_name = 'F4-T32 Borehole qc Profile'
     
     # 添加標籤和標題
     plt.xlabel('qc (MPa)')
     plt.ylabel('Depth (m)')
-    plt.title('14')
+    plt.title(fig_name)
     
     # 添加網格
     plt.grid(linestyle='-', linewidth=0.5)
+    # 在20m處加深網格
+    plt.axhline(y=20, color='teal', linestyle='-', linewidth=2)
+    plt.axhline(y=40, color='teal', linestyle='-', linewidth=2)
+    plt.axhline(y=60, color='teal', linestyle='-', linewidth=2)
+    plt.axhline(y=80, color='teal', linestyle='-', linewidth=2)
     
     # 設置 x 和 y 軸的刻度
-    x_major_locator = plt.MultipleLocator(2)
+    x_major_locator = plt.MultipleLocator(5)
     y_major_locator = plt.MultipleLocator(10)
     ax.xaxis.set_major_locator(x_major_locator)
     ax.yaxis.set_major_locator(y_major_locator)
 
-    # 保存圖片
-    plt.savefig('qc-14')
+    # 保存圖片+圖片不留白邊
+    plt.savefig(fig_name + '.png', dpi=300, bbox_inches='tight', pad_inches=0.1)
 
     # 顯示圖片
     plt.show()

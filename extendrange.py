@@ -17,9 +17,10 @@ Matrix5D = '5DMatrix.csv'
 sixHole = '6Hole.csv'
 test='test - 複製.csv'
 eightSoil='8soil.csv'
+CECI='markov_matrix.csv'
 CECI='markov_matrix_20-22.csv'
 CTCI='CTCI.csv'
-predict_file = r'C:\\Users\\Love_U\\Desktop\\CTCI_Markov\\CTCI_Markov\\markov_matrix_20-22.csv'
+predict_file = 'markov_matrix_20-22.csv'
 # -----------testing file----------------
 # 記錄開始時間
 start_time = time.time()
@@ -28,83 +29,48 @@ start_time = time.time()
 
 # -----------call simplify_data.py----------------
 # file preprocessing
+entire_file = pd.read_csv('markov_matrix.csv', delimiter=",",header=None).fillna(0).values # 讀取文件空值全部補0
 entire_file = pd.read_csv(predict_file, delimiter=",",header=None).fillna(0).values # 讀取文件空值全部補0
 # entire_file沒有標題，所以第一行是數據
 entire_matrix = entire_file[2:, :]  # skip first column 第一行是名稱
 # 取得標題作為孔洞名稱
 Hole_name = entire_file[0]
 Hole_distance = entire_file[1]
-# 矩陣上下統計範圍
-m = int(5*50)
-# 把 entire_matrix 拆成多個部分(每500個更新一次matrix)
-# 迴圈數量
-num_of_loops = entire_matrix.shape[0] // (5*50)
-entire_matrices = {}
-#根據迴圈數量建立多個矩陣
-for i in range(num_of_loops):
-    key = f'entire_matrix_{i+1}'
-    matrix = entire_matrix[(i+1)*5*50-m:(i+1)*5*50 + m, :]
-    entire_matrices[key] = matrix
+extendrange = 50*5
+# 把 entire_matrix 拆成4個部分
+entire_matrix_1 = entire_matrix[:2000+extendrange, :]
+# print('entire_matrix_1:', entire_matrix_1)
 
-print(f'Created {len(entire_matrices)} matrices for processing.')
+entire_matrix_2 = entire_matrix[2000-extendrange:3000+extendrange,:]
+# # print('entire_matrix_2:', entire_matrix_2)
+
+entire_matrix_3 = entire_matrix[3000-extendrange:4000+extendrange, :]
+# print('entire_matrix_3:', entire_matrix_3)
+
+entire_matrix_4 = entire_matrix[4000-extendrange:, :]
+# print('entire_matrix_4:', entire_matrix_4)
+# 取得初始狀態
+initial_array_1 = entire_matrix_1[0]
+initial_array_2 = entire_matrix_2[0]
+initial_array_3 = entire_matrix_3[0]
+initial_array_4 = entire_matrix_4[0]
+
 result_matrix = []
 
-# previous_matrix = None
-# for matrix in enumerate(entire_matrix):
-#     if np.any(matrix[0] == 0):
-#         if previous_matrix is not None:
-#             merged = np.vstack((previous_matrix, matrix))
-#             entire_matrices[-1] = merged  # 更新前一個矩陣為合併結果
-#             previous_matrix = merged
-#             # 從entire_matrix del matrix
-
-#         else:
-#             # 如果是第一個矩陣且含0，直接加入（無法合併）
-#             previous_matrix = matrix
-#     else:
-#         previous_matrix = matrix
-
-i = 2  # 字典鍵從'entire_matrix_1'開始，所以從2開始檢查
-while i <= len(entire_matrices):
-    key = f'entire_matrix_{i}'
-    prev_key = f'entire_matrix_{i-1}'
-    #列印entire_matrix_{i-1}和entire_matrix_{i}的長度
-    matrix = entire_matrices[key]
-
-    # 檢查第一行是否有 0
-    if np.any(matrix[0] == 0):
-        # 與前一個矩陣合併
-        entire_matrices[prev_key] = np.vstack((entire_matrices[prev_key], matrix))
-        # 列印合併前的矩陣長度
-        print(f'Before merging, length of entire_matrix_{prev_key}: {len(entire_matrices[prev_key]) - len(matrix)}, length of entire_matrix_{i}: {len(matrix)}')
-        # 列印合併後的矩陣長度
-        print(f'Merged entire_matrix_{i} into entire_matrix_{i-1}, new length: {len(entire_matrices[prev_key])}')
-        # 刪除當前矩陣鍵
-        del entire_matrices[key]
-        
-        # 更新後，字典少了一個，所以不增加i繼續檢查下一個鍵
-        # 但因鍵被刪了，後面的鍵名會不連續，您可能需要重新整理鍵名
-
-        # 建議終止迴圈來手動重新整理字典
-        break
-    else:
-        i += 1
-    
-num_of_loops = len(entire_matrices)
-print(entire_matrix.shape)
-
-
 # 建立迴圈分析三個部分
-for i in range(1, num_of_loops + 1):
-
-    # 讀取第i個矩陣
-    entire_matrix = entire_matrices[f'entire_matrix_{i}']
-    print(f'Processing entire_matrix_{i}')
-
-    # 取得初始狀態
-    initial_array = entire_matrix[0]
-    print('initial_array:',initial_array)
-
+for i in range(1,5):
+    if i == 1:
+        entire_matrix = entire_matrix_1
+        initial_array = initial_array_1
+    elif i == 2:
+        entire_matrix = entire_matrix_2
+        initial_array = initial_array_2
+    elif i == 3:
+        entire_matrix = entire_matrix_3
+        initial_array = initial_array_3
+    else:
+        entire_matrix = entire_matrix_4
+        initial_array = initial_array_4
     # 取得土壤種類
     unique_numbers = np.unique(entire_matrix)
     # 從unique_numbers過濾掉0
@@ -120,10 +86,12 @@ for i in range(1, num_of_loops + 1):
     transitionName = np.arange(1,typenumber+1)
     # file preprocessing
 
+    # 參考前後土層厚度
+    refer_depth = 5/0.02  # 假設每層厚度為100
 
     # 定義模型的間隔、寬度、深度、面積、孔洞數量和地質類型數量等參數
     W = int(int(Hole_distance.max())) + 1
-    D = int(entire_matrix.shape[0]) //2
+    D = int(entire_matrix.shape[0]- refer_depth) 
     # print('D:',D)
     # print('W:',W)
 
@@ -142,17 +110,17 @@ for i in range(1, num_of_loops + 1):
         for location in Hole_distance:
             for type in initial_array:
                 for i in range(W):
-                    if i<location: 
+                    if i<location:
                         group_number[0][i] = mapping[type]
                     else:
                         continue
-        
+
         for i in range(D):
             for j in range(len(hole_location)):
                 group_number[i][(hole_location[j])] = matrix[i][j]
         T_t_V = np.zeros(len(matrix))
         soiltype_V = {}
-                
+
         soiltype_V = Counter(matrix.flatten())
         del soiltype_V[0]  # Remove count of zeros, if necessary
         soiltype_V = sorted(soiltype_V.items(), key=op.itemgetter(0), reverse=False)
@@ -195,7 +163,7 @@ for i in range(1, num_of_loops + 1):
         for i in range(np.size(Tmatrix_H, 1)):
             for j in range(np.size(Tmatrix_H, 1)):
                 Tmatrix_H[i][j] = Tmatrix_H[i][j] / count_H[i]
-                
+
         return Tmatrix_V, Tmatrix_H ,group_number
 
     # 計算 HoleLocation_entire 的轉移矩陣
@@ -217,7 +185,7 @@ for i in range(1, num_of_loops + 1):
                 # 若為位置是有資料的就跳過(為鑽孔位置)
                 if group_number[layer][i] :
                     continue
-                
+
                 L_state = 0
                 M_state = 0
                 Q_state = 0
@@ -247,8 +215,8 @@ for i in range(1, num_of_loops + 1):
                 L_state = group_number[layer][i-1] - 1
                 M_state = group_number[layer-1][i] - 1
                 Q_state = group_number[layer][Nx] - 1          
-            
-                
+
+
                 for f in range(typenumber):
                     f_item1 = Tmatrix_H[int(L_state)][f]
                     f_item2 = Nx_TH[f][int(Q_state)]
@@ -302,7 +270,7 @@ end_time = time.time()
 execution_time = end_time - start_time
 print(f"程式運行時間（預測流程）: {execution_time:.2f} 秒")
 # ===========================================
-    
+
 
 def irregular_shift(combined_matrix, max_shift):
     """
@@ -490,4 +458,3 @@ plt.xlabel('Width (units)')
 plt.ylabel('Depth (units)')
 plt.tight_layout()
 plt.savefig('Prediction_with_legend_side.png')
-plt.show()

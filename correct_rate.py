@@ -17,7 +17,7 @@ else:
     raise ValueError("Excel 檔案中沒有 'Soil Type' 列")
 
 # 讀取一個csv檔案
-result = pd.read_csv('C:\\Users\\Love_U\\Desktop\\CTCI_predict_result\\12-15\\Saperate\\Saperate_12-15_20.txt')
+result = pd.read_csv('C:\\Users\\Love_U\\Desktop\\CTCI_predict_result\\12-15\\Mutative\\20m_30.txt')
 result = result.values.flatten()
 
 # 計算正確率
@@ -38,13 +38,22 @@ y = correct_rate / (end - start) * 100
 y = round(y, 2)
 print(f'total: {y}')
 
+# 0-60m
+correct_rate = 0
+start = 0
+end= 3000
+
+for i in range(start, end):
+    if original[i] == result[i]:
+        correct_rate += 1
+y = correct_rate / (end - start) * 100
+y = round(y, 2)
+print(f'0-60m: {y}')       
+
 # 0-20m
 correct_rate = 0
-start = 1000
-if len(original) < len(result):
-    end = len(original)
-else:
-    end = len(result)
+start = 0
+end = 1000
 
 for i in range(start, end):
     if original[i] == result[i]:
