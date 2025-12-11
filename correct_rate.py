@@ -4,7 +4,7 @@ from tkinter import filedialog
 # 讀取一個excel檔案
 # 建立視窗選取檔案
 # file_path = filedialog.askopenfilename()
-file_path = 'C:\\Users\\Love_U\Desktop\\CTCI_Markov\\CTCI_Markov\\萬鼎全部鑽孔\\F4-T14_modified_processed.xlsx'
+file_path = 'C:\\Users\\Love_U\Desktop\\CTCI_Markov\\CTCI_Markov\\萬鼎全部鑽孔\\F4-T21_modified_processed.xlsx'
 
 df = pd.read_excel(file_path)
 
@@ -17,7 +17,7 @@ else:
     raise ValueError("Excel 檔案中沒有 'Soil Type' 列")
 
 # 讀取一個csv檔案
-result = pd.read_csv('C:\\Users\\Love_U\\Desktop\\CTCI_predict_result\\12-15\\Mutative\\20m_30.txt')
+result = pd.read_csv('C:\\Users\\Love_U\\Desktop\\CTCI_predict_result\\20-22\\Mutative_20-22_10m\\Mutative_20-22_10m_21.txt')
 result = result.values.flatten()
 
 # 計算正確率
