@@ -17,10 +17,7 @@ Matrix5D = '5DMatrix.csv'
 sixHole = '6Hole.csv'
 test='test - 複製.csv'
 eightSoil='8soil.csv'
-CECI='markov_matrix.csv'
-CECI='markov_matrix_20-22.csv'
-CTCI='CTCI.csv'
-predict_file = 'markov_matrix_20-22.csv'
+predict_file = r"C:\\Users\\yo\\OneDrive - 國立臺灣科技大學\\桌面\\CTCI_Markov\\markov_matrix_12-15.csv"
 # -----------testing file----------------
 # 記錄開始時間
 start_time = time.time()
@@ -29,14 +26,13 @@ start_time = time.time()
 
 # -----------call simplify_data.py----------------
 # file preprocessing
-entire_file = pd.read_csv('markov_matrix.csv', delimiter=",",header=None).fillna(0).values # 讀取文件空值全部補0
 entire_file = pd.read_csv(predict_file, delimiter=",",header=None).fillna(0).values # 讀取文件空值全部補0
 # entire_file沒有標題，所以第一行是數據
 entire_matrix = entire_file[2:, :]  # skip first column 第一行是名稱
 # 取得標題作為孔洞名稱
 Hole_name = entire_file[0]
 Hole_distance = entire_file[1]
-extendrange = 50*5
+extendrange = 50*10
 # 把 entire_matrix 拆成4個部分
 entire_matrix_1 = entire_matrix[:2000+extendrange, :]
 # print('entire_matrix_1:', entire_matrix_1)
